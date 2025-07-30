@@ -5,10 +5,11 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Remove trailing slashes
+  // Remove trailing slashes  
   trailingSlash: false,
   // Add base path for GitHub Pages
   basePath: process.env.GITHUB_ACTIONS ? '/woom_presale' : '',
+  distDir: 'out',
 };
 
 export default nextConfig;
