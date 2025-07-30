@@ -75,6 +75,15 @@ export default function DiscountSection() {
     }, []);
 
     const formatTime = (value: number) => value.toString().padStart(2, '0');
+    
+    // Calculate prices based on current discount
+    const originalPrice = 600000;
+    const discountedPrice = Math.round(originalPrice * (1 - currentDiscount / 100));
+    
+    // Format price with thousands separator
+    const formatPrice = (price: number) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    };
 
     return (
         <section id="discount" className="bg-white section-padding">
@@ -126,6 +135,24 @@ export default function DiscountSection() {
                             <p className="text-base md:text-lg lg:text-2xl text-black/70 tracking-[0.12px]">
                                 Присоединяйтесь к WOOM и получите скидку до {currentDiscount}% на годовые клубные карты!
                             </p>
+
+                            {/* Price Block */}
+                            <div className="flex flex-col gap-2">
+                                <div className="flex items-baseline gap-3 md:gap-4 flex-wrap">
+                                    <span className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#eb3d3d]">
+                                        {formatPrice(discountedPrice)} ₸
+                                    </span>
+                                    <span className="text-lg md:text-xl lg:text-2xl text-black/40 line-through">
+                                        {formatPrice(originalPrice)} ₸
+                                    </span>
+                                    <span className="inline-flex items-center bg-[#eb3d3d]/10 text-[#eb3d3d] px-3 py-1 text-sm md:text-base font-semibold">
+                                        Экономия {formatPrice(originalPrice - discountedPrice)} ₸
+                                    </span>
+                                </div>
+                                <p className="text-sm md:text-base text-black/60">
+                                    Цена за годовую клубную карту
+                                </p>
+                            </div>
 
                             {/* Actions */}
                             <div 
