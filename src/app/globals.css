@@ -30,6 +30,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -39,6 +40,21 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Main wrapper to prevent horizontal scroll */
+#__next,
+main {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Ensure all sections stay within viewport */
+section {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Responsive Container */
@@ -192,16 +208,17 @@ body {
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 100%;
+  right: 0;
+  width: 50%;
   height: 100vh;
-  background-color: white;
+  background-color: black;
   z-index: 50;
-  transition: right 0.3s ease;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
 }
 
 .mobile-menu.open {
-  right: 0;
+  transform: translateX(0);
 }
 
 @media (min-width: 768px) {
@@ -229,7 +246,13 @@ body {
 }
 
 .animate-scroll {
-  animation: scroll 30s linear infinite;
+  animation: scroll 20s linear infinite;
+}
+
+@media (min-width: 768px) {
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
 }
 
 /* Custom letter spacing adjustment */

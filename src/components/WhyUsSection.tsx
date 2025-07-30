@@ -79,7 +79,7 @@ export default function WhyUsSection() {
                             ref={badgeRef as React.RefObject<HTMLDivElement>}
                             className={`inline-flex items-center animate-scale ${badgeVisible ? 'visible' : ''}`}
                         >
-                            <LogoBadge text="WOOM ВИДЕНИЕ БРЕНДА" />
+                            <LogoBadge text="Наша философия" />
                         </div>
                         <h2 className="text-[#040815] heading-2 font-semibold uppercase">
                             КАЖДЫЙ ТВОЙ 1% ЗАСЧИТЫВАЕТСЯ
@@ -107,29 +107,45 @@ export default function WhyUsSection() {
 
                         {/* Mobile Slider */}
                         <div className="md:hidden relative">
-                            <div 
-                                className="flex transition-transform duration-300 ease-out"
-                                ref={containerRef}
-                                onTouchStart={handleTouchStart}
-                                onTouchMove={handleTouchMove}
-                                onTouchEnd={handleTouchEnd}
-                            >
-                                {features.map((feature, index) => (
-                                    <div key={index} className="w-full flex-shrink-0">
-                                        <FeatureCard {...feature} />
-                                    </div>
-                                ))}
+                            <div className="relative overflow-hidden">
+                                <div 
+                                    className="flex transition-transform duration-300 ease-out"
+                                    ref={containerRef}
+                                    onTouchStart={handleTouchStart}
+                                    onTouchMove={handleTouchMove}
+                                    onTouchEnd={handleTouchEnd}
+                                >
+                                    {features.map((feature, index) => (
+                                        <div key={index} className="w-full flex-shrink-0">
+                                            <FeatureCard {...feature} />
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Click areas for navigation */}
+                                <button
+                                    className="absolute left-0 top-0 h-full w-1/3 bg-transparent"
+                                    onClick={() => currentIndex > 0 && setCurrentIndex(currentIndex - 1)}
+                                    aria-label="Previous slide"
+                                />
+                                <button
+                                    className="absolute right-0 top-0 h-full w-1/3 bg-transparent"
+                                    onClick={() => currentIndex < features.length - 1 && setCurrentIndex(currentIndex + 1)}
+                                    aria-label="Next slide"
+                                />
                             </div>
 
                             {/* Mobile Pagination Dots */}
-                            <div className="flex justify-center gap-2 mt-4">
+                            <div className="flex justify-center gap-2 mt-4" style={{
+                                paddingTop: '12px',
+                            }}>
                                 {features.map((_, index) => (
                                     <button
                                         key={index}
                                         onClick={() => setCurrentIndex(index)}
                                         className={`h-2 rounded-full transition-all ${
                                             index === currentIndex
-                                                ? "w-8 bg-primary"
+                                                ? "w-8 bg-[#eb3d3d]"
                                                 : "w-2 bg-gray-300"
                                         }`}
                                         aria-label={`Go to slide ${index + 1}`}

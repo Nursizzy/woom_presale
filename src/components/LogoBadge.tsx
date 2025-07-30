@@ -17,7 +17,7 @@ export default function LogoBadge({
 
     return (
         <span className={`inline-flex items-center backdrop-blur-[12.5px] ${styles.container} px-4 py-3 gap-3`} style={{
-            padding: '4px'
+            padding: '12px 16px'
         }}>
       <div className="w-7 h-3.5 relative">
         <Image

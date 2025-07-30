@@ -7,7 +7,7 @@ export default function MapSection() {
     
     return (
         <section 
-            id="map" 
+            id="location"
             ref={mapRef as React.RefObject<HTMLElement>}
             className={`relative h-[400px] md:h-[500px] lg:h-[600px] xl:h-[720px] bg-[#f9f9fb] animate-fade-in animate-scale ${mapVisible ? 'visible' : ''}`}
         >
@@ -20,8 +20,6 @@ export default function MapSection() {
                     style={{ border: 0 }}
                     allowFullScreen={true}
                     loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="grayscale opacity-90"
                     title="Location map"
                 />
 

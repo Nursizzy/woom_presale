@@ -66,10 +66,10 @@ export default function ContactFormSection() {
         <section id="contact" className="bg-white section-padding">
             <div className="container">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-16 items-center">
-                    {/* Image */}
+                    {/* Image - Hidden on mobile */}
                     <div 
                         ref={imageRef as React.RefObject<HTMLDivElement>}
-                        className={`relative w-full sm:w-[400px] md:w-[450px] lg:w-[530px] h-[300px] sm:h-[400px] md:h-[450px] lg:h-[530px] overflow-hidden flex-shrink-0 order-last lg:order-first animate-slide-left ${imageVisible ? 'visible' : ''}`}>
+                        className={`hidden sm:block relative sm:w-[400px] md:w-[450px] lg:w-[530px] sm:h-[400px] md:h-[450px] lg:h-[530px] overflow-hidden flex-shrink-0 order-last lg:order-first animate-slide-left ${imageVisible ? 'visible' : ''}`}>
                         <Image
                             src="/images/contact-bg.png"
                             alt="Gym interior"

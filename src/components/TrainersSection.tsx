@@ -1,32 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import {useState, useRef, useEffect} from "react";
-import {ChevronRight} from "lucide-react";
+import { useState, useRef} from "react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import LogoBadge from "@/components/LogoBadge";
-import {useScrollAnimation} from "@/hooks/useScrollAnimation";
 
-export default function TrainersSection() {
+export default function ZonesSection() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [desktopIndex, setDesktopIndex] = useState(0);
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
-    const desktopContainerRef = useRef<HTMLDivElement>(null);
 
     // Scroll animation hooks
-    const {ref: headerRef, isVisible: headerVisible} = useScrollAnimation({threshold: 0.3});
-    const {ref: cardsRef, isVisible: cardsVisible} = useScrollAnimation({threshold: 0.2});
-    const {ref: paginationRef, isVisible: paginationVisible} = useScrollAnimation({threshold: 0.3});
+    const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+    const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.2 });
 
-    const trainers = [
+    const zones = [
         {
             name: "Спа зона",
             experience: "Бассейн 17 метров, несколько видов бань и массажный кабинет",
-            image: "/images/feature-1.png"
+            image: "/images/contact-bg.png"
         },
         {
-            name: "Free Gym Zone",
+            name: "Free Gym Зона",
             experience: "Зона тренажерного зала полностью оборудована под все нужды",
             image: "/images/gallery/gallery-bg-2.jpg"
         },
@@ -41,9 +38,9 @@ export default function TrainersSection() {
             image: "/images/gallery/gallery-bg-6.jpg"
         },
         {
-            name: "Собственное приложение",
-            experience: "Приложение для отслеживания прогресса, плана тренировок и записи на групповые",
-            image: "/images/feature-1.png"
+            name: "Приложение",
+            experience: "Для отслеживания прогресса и записи на групповые",
+            image: "/images/contact-bg.png"
         },
         {
             name: "Фитнес бар",
@@ -52,14 +49,15 @@ export default function TrainersSection() {
         },
     ];
 
+    // Calculate max index - can't go beyond showing the last 3 cards
+    const maxIndex = Math.max(0, zones.length - 3);
+
     const nextSlide = () => {
-        // Show 3 items at a time, so max index is length - 3
-        const maxIndex = Math.max(0, trainers.length - 3);
-        setDesktopIndex((prev) => Math.min(prev + 1, maxIndex));
+        setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
     };
 
     const prevSlide = () => {
-        setDesktopIndex((prev) => Math.max(prev - 1, 0));
+        setCurrentIndex((prev) => Math.max(prev - 1, 0));
     };
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -77,196 +75,230 @@ export default function TrainersSection() {
         const isLeftSwipe = distance > 50;
         const isRightSwipe = distance < -50;
 
-        if (isLeftSwipe && currentIndex < trainers.length - 1) {
-            setCurrentIndex(currentIndex + 1);
+        if (isLeftSwipe && currentIndex < maxIndex) {
+            nextSlide();
         }
         if (isRightSwipe && currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
+            prevSlide();
         }
     };
 
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-    }, [currentIndex]);
 
-    useEffect(() => {
-        if (desktopContainerRef.current) {
-            const cardWidth = 33.333; // Width of each card (1/3 = 33.333%)
-            desktopContainerRef.current.style.transform = `translateX(-${desktopIndex * cardWidth}%)`;
-        }
-    }, [desktopIndex]);
 
     return (
-        <section id="trainers" className="bg-white section-padding overflow-hidden">
+        <section id="zones" className="bg-white section-padding">
             <div className="container">
-                <div className="flex flex-col gap-10 md:gap-12 lg:gap-16">
+                <div className="flex flex-col gap-16">
                     {/* Section Header */}
                     <div
                         ref={headerRef as React.RefObject<HTMLDivElement>}
-                        className={`flex flex-col gap-3 md:gap-4 lg:gap-5 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+                        className={`flex flex-col gap-5 animate-fade-up ${headerVisible ? 'visible' : ''}`}
                     >
                         <div className="inline-flex items-center">
-                            <LogoBadge text={'WOOM ЗОНЫ'}/>
+                       <LogoBadge text={'Наши Зоны'}/>
                         </div>
-                        <h2 className="text-[#040815] text-3xl md:text-4xl lg:text-5xl font-semibold uppercase tracking-[0.24px]">
-                            Что мы предлагаем
+                        <h2 className="text-[#000000] text-3xl lg:text-5xl font-semibold uppercase tracking-[0.24px]">
+                            ЧТО МЫ ПРЕДЛАГАЕМ
                         </h2>
-                        <p className="text-[#040815] text-base md:text-lg lg:text-2xl opacity-70 tracking-[0.12px] max-w-3xl">
-                            Woom гарантирует: современный зал,
-                            бассейн, квалифицированные тренеры и
-                            100 % женскую атмосферу — всё для того,
-                            чтобы даже один небольшой шаг в
-                            день привёл к заметному результату через
-                            год.
+                        <p className="text-[#000000] text-lg lg:text-2xl opacity-70 tracking-[0.12px] max-w-[800px] leading-[1.3]">
+                            Woom гарантирует: современный зал, бассейн, квалифицированные тренеры и 100% женскую атмосферу
                         </p>
                     </div>
 
-                    {/* Trainers Grid/Slider */}
+                    {/* Content with Cards and Navigation */}
                     <div className="relative">
-                        {/* Desktop Slider */}
                         <div
                             ref={cardsRef as React.RefObject<HTMLDivElement>}
-                            className="hidden md:block overflow-hidden"
+                            className={`animate-stagger ${cardsVisible ? 'visible' : ''}`}
                         >
-                            <div
-                                ref={desktopContainerRef}
-                                className={`flex gap-3 transition-transform duration-500 ease-out animate-stagger ${cardsVisible ? 'visible' : ''}`}
-                            >
-                                {trainers.map((trainer, index) => (
-                                    <div
-                                        key={index}
-                                        className="w-1/2 lg:w-1/3 px-2 md:px-3 lg:px-4 flex-shrink-0"
-                                    >
-                                        <TrainerCard
-                                            name={trainer.name}
-                                            experience={trainer.experience}
-                                            image={trainer.image}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
+                            {/* Desktop View */}
+                            <div className="hidden lg:block">
+                                <div className="flex gap-6 items-center">
+                                    {/* Left Arrow */}
+                                    {currentIndex > 0 && (
+                                        <button
+                                            onClick={prevSlide}
+                                            className="absolute left-[-100px] top-1/2 -translate-y-1/2 flex-shrink-0 w-[72px] h-[72px] bg-white backdrop-blur-[15px] rounded-full border border-white/50 flex items-center justify-center transition-all hover:shadow-lg z-10"
+                                            aria-label="Previous zones"
+                                        >
+                                            <ArrowLeft className="w-8 h-8 text-[#040815]" />
+                                        </button>
+                                    )}
 
-                            {/* Navigation Arrows */}
-                            {trainers.length > 3 && (
-                                <>
-                                    <button
-                                        onClick={prevSlide}
-                                        disabled={desktopIndex === 0}
-                                        className={`absolute left-0 top-1/2 -translate-y-1/2 w-[72px] h-[72px] bg-white rounded-full border border-gray-200 flex items-center justify-center transition-all tap-target z-10 ${
-                                            desktopIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
-                                        }`}
-                                        aria-label="Previous trainers">
-                                        <ChevronRight className="w-8 h-8 text-[#040815] rotate-180"/>
-                                    </button>
+                                    {/* Cards Container - Always show 3 cards */}
+                                    <div className="relative w-full h-[500px] overflow-hidden">
+                                        {/* Render all cards but position them based on their relation to current index */}
+                                        {zones.map((zone, index) => {
+                                            // Calculate position relative to current index
+                                            const relativePosition = index - currentIndex;
+
+                                            // Don't render cards too far away
+                                            if (relativePosition < -1 || relativePosition > 3) return null;
+
+                                            let xPosition = 0;
+                                            let width = 0;
+                                            let isLarge = false;
+
+                                            if (relativePosition === -1) {
+                                                // Previous card (sliding out to left)
+                                                xPosition = -532;
+                                                width = 500;
+                                                isLarge = true;
+                                            } else if (relativePosition === 0) {
+                                                // Current selected card
+                                                xPosition = 0;
+                                                width = 500;
+                                                isLarge = true;
+                                            } else if (relativePosition === 1) {
+                                                // Second visible card
+                                                xPosition = 532;
+                                                width = 392;
+                                            } else if (relativePosition === 2) {
+                                                // Third visible card
+                                                xPosition = 956;
+                                                width = 392;
+                                            } else if (relativePosition === 3) {
+                                                // Next card (ready to slide in from right)
+                                                xPosition = 1380; // 956 + 392 + 32
+                                                width = 392;
+                                            }
+
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="absolute top-0 transition-all duration-700 ease-in-out"
+                                                    style={{
+                                                        left: `${xPosition}px`,
+                                                        width: `${width}px`,
+                                                    }}
+                                                >
+                                                    <ZoneCard
+                                                        name={zone.name}
+                                                        experience={zone.experience}
+                                                        image={zone.image}
+                                                        isLarge={isLarge}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Right Arrow */}
                                     <button
                                         onClick={nextSlide}
-                                        disabled={desktopIndex >= trainers.length - 3}
-                                        className={`absolute right-0 top-1/2 -translate-y-1/2 w-[72px] h-[72px] bg-white rounded-full border border-gray-200 flex items-center justify-center transition-all tap-target z-10 ${
-                                            desktopIndex >= trainers.length - 3 ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
-                                        }`}
-                                        aria-label="Next trainers">
-                                        <ChevronRight className="w-8 h-8 text-[#040815]"/>
+                                        disabled={currentIndex >= maxIndex}
+                                        className={`absolute right-[-100px] top-1/2 -translate-y-1/2 flex-shrink-0 w-[72px] h-[72px] bg-white backdrop-blur-[15px] rounded-full border border-white/50 flex items-center justify-center transition-all ${
+                                            currentIndex >= maxIndex ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg'
+                                        } z-10`}
+                                        aria-label="Next zones"
+                                    >
+                                        <ArrowRight className="w-8 h-8 text-[#040815]" />
                                     </button>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Mobile Slider */}
-                        <div className="md:hidden relative">
-                            <div
-                                className="flex transition-transform duration-300 ease-out"
-                                ref={containerRef}
-                                onTouchStart={handleTouchStart}
-                                onTouchMove={handleTouchMove}
-                                onTouchEnd={handleTouchEnd}
-                            >
-                                {trainers.map((trainer, index) => (
-                                    <div key={index} className="w-full flex-shrink-0">
-                                        <TrainerCard
-                                            name={trainer.name}
-                                            experience={trainer.experience}
-                                            image={trainer.image}
-                                        />
-                                    </div>
-                                ))}
+                                </div>
                             </div>
 
-                            {/* Mobile Pagination Dots */}
-                            <div className="flex justify-center gap-2 mt-6">
-                                {trainers.map((_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setCurrentIndex(index)}
-                                        className={`h-2 rounded-full transition-all ${
-                                            index === currentIndex
-                                                ? "w-8 bg-primary"
-                                                : "w-2 bg-gray-300"
-                                        }`}
-                                        aria-label={`Go to trainer ${index + 1}`}
-                                    />
-                                ))}
+                            {/* Mobile View - Show 1 card */}
+                            <div className="lg:hidden relative">
+                                <div
+                                    className="overflow-hidden"
+                                    onTouchStart={handleTouchStart}
+                                    onTouchMove={handleTouchMove}
+                                    onTouchEnd={handleTouchEnd}
+                                >
+                                    <div
+                                        ref={containerRef}
+                                        className="flex transition-transform duration-300 ease-out"
+                                        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                                    >
+                                        {zones.map((zone, index) => (
+                                            <div key={index} className="w-full flex-shrink-0">
+                                                <ZoneCard
+                                                    name={zone.name}
+                                                    experience={zone.experience}
+                                                    image={zone.image}
+                                                    isLarge={true}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Click areas for navigation */}
+                                <button
+                                    className="absolute left-0 top-0 h-full w-1/3 bg-transparent"
+                                    onClick={() => currentIndex > 0 && setCurrentIndex(currentIndex - 1)}
+                                    aria-label="Previous zone"
+                                />
+                                <button
+                                    className="absolute right-0 top-0 h-full w-1/3 bg-transparent"
+                                    onClick={() => currentIndex < zones.length - 1 && setCurrentIndex(currentIndex + 1)}
+                                    aria-label="Next zone"
+                                />
+
+                                {/* Mobile Pagination Dots */}
+                                <div className="flex justify-center gap-2 mt-6" style={{
+                                    paddingTop: '12px',
+                                }}>
+                                    {zones.map((_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentIndex(index)}
+                                            className={`h-2 rounded-full transition-all ${
+                                                index === currentIndex
+                                                    ? "w-8 bg-[#eb3d3d]"
+                                                    : "w-2 bg-gray-300"
+                                            }`}
+                                            aria-label={`Go to zone ${index + 1}`}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* Desktop Pagination */}
-                    {trainers.length > 3 && (
-                        <div
-                            ref={paginationRef as React.RefObject<HTMLDivElement>}
-                            className={`hidden md:flex md:gap-3 justify-center animate-fade-in ${paginationVisible ? 'visible' : ''}`}
-                        >
-                            {trainers.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setDesktopIndex(index)}
-                                    className={`${
-                                        index >= desktopIndex && index < desktopIndex + 3
-                                            ? "w-8 md:w-10 lg:w-12"
-                                            : "w-2 md:w-[9px]"
-                                    } h-2 md:h-[9px] ${
-                                        index >= desktopIndex && index < desktopIndex + 3
-                                            ? "bg-[#ed3d3d]"
-                                            : "bg-[#ed3d3d]/30 hover:bg-black/40"
-                                    } rounded-full transition-all tap-target flex items-center justify-center`}
-                                    aria-label={`Go to slide ${index + 1}`}
-                                />
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
         </section>
     );
 }
 
-function TrainerCard({
-                         name,
-                         experience,
-                         image,
-                     }: {
+function ZoneCard({
+                      name,
+                      experience,
+                      image,
+                      isLarge = false,
+                  }: {
     name: string;
     experience: string;
     image: string;
+    isLarge?: boolean;
 }) {
     return (
-        <div className="relative h-[300px] md:h-[350px] lg:h-[400px] overflow-hidden group cursor-pointer">
+        <div
+            className={`relative w-full ${isLarge ? 'h-[500px]' : 'h-[440px]'} overflow-hidden group cursor-pointer transition-all duration-700 ease-in-out flex flex-col items-center justify-end`}
+        >
+            {/* Background Image */}
             <Image
                 src={image}
                 alt={name}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                <div
-                    className="backdrop-blur-[20px] bg-gradient-to-r from-[#ed3d3d]/50 to-[#ed3d3d]/60 border border-white/20 shadow-lg p-4 md:p-5 lg:p-6 flex items-center justify-between" style={{background: 'linear-gradient(135deg, rgba(237, 61, 61, 0.7) 0%, rgba(237, 61, 61, 0.6) 100%)', backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)', padding:'12px'}}>
-                    <div className="text-white">
-                        <h3 className="text-xl md:text-2xl font-semibold tracking-[0.12px] mb-1">{name}</h3>
-                        <p className="text-xs md:text-sm font-medium tracking-[0.07px]">{experience}</p>
-                    </div>
-                </div>
+
+            {/* Gradient Overlay with Text */}
+            <div className="relative z-10 bg-gradient-to-b from-transparent to-black/75 pt-12 pb-6 px-6 w-full flex flex-col gap-3"
+            style={{
+                padding:'12px 24px'
+            }}>
+                <h3 className={`font-semibold text-white tracking-[-1.2px] leading-[1.2] ${
+                    isLarge ? 'text-[40px]' : 'text-[32px]'
+                }`}>
+                    {name}
+                </h3>
+                <p className={`text-white/80 tracking-[-0.48px] leading-[1.2] ${
+                    isLarge ? 'text-base' : 'text-sm'
+                }`}>
+                    {experience}
+                </p>
             </div>
         </div>
     );
