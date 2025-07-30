@@ -26,8 +26,8 @@ export const metadata: Metadata = {
         ],
     },
     openGraph: {
-        title: "WOOM Fitness - Женский фитнес зал в Алматы",
-        description: "Фитнес студия нового формата, где ты будешь тренироваться в 3 раза чаще и эффективней",
+        title: "WOOM - Женский фитнес зал в Алматы",
+        description: "Этап предпродаж! Успей получить клубную карту по выгодной цене",
         type: "website",
         locale: "ru_RU",
         siteName: "WOOM Fitness",
