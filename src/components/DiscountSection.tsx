@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { UserPlus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 

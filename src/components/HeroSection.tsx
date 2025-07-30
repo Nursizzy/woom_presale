@@ -7,7 +7,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 export default function HeroSection() {
     const [isVideoLoaded, setIsVideoLoaded] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const { ref: contentRef, isVisible } = useScrollAnimation({ threshold: 0.2 });
+    const { ref: contentRef, isVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.2 });
 
     useEffect(() => {
         if (videoRef.current) {

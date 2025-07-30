@@ -8,8 +8,8 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 export default function GallerySection() {
   const [currentSlide, setCurrentSlide] = useState(2); // Third slide active by default
   const totalSlides = 9; // Updated to 9 slides
-  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.4 });
+  const { ref: sectionRef, isVisible } = useScrollAnimation<HTMLElement>({ threshold: 0.3 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.4 });
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);

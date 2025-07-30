@@ -22,7 +22,7 @@ export default function AnimatedSection({
 
     return (
         <div
-            ref={ref}
+            ref={ref as React.RefObject<HTMLDivElement>}
             className={`animate-${animation} ${isVisible ? "visible" : ""} ${className}`}
             style={{ transitionDelay: `${delay}ms` }}
         >

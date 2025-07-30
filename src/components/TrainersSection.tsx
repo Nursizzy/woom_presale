@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import {useState, useRef, useEffect} from "react";
-import {ArrowUpRight, ChevronRight} from "lucide-react";
+import {ChevronRight} from "lucide-react";
 import LogoBadge from "@/components/LogoBadge";
 import {useScrollAnimation} from "@/hooks/useScrollAnimation";
 
